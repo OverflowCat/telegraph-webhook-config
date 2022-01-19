@@ -3,7 +3,7 @@
   <input class="mdui-textfield-input" type="url" bind:value={value}/>
 </div>
 
-<script>
+<script lang="ts">
   export let label = "";
   export let value = "";
 </script>
