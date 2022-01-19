@@ -1,12 +1,12 @@
 <script lang="ts">
-  import FormField from "@smui/form-field";
-  import Checkbox from "@smui/checkbox";
-  import TextField from "@smui/textfield";
-  import Icon from "@smui/textfield/icon";
-  import HelperText from "@smui/textfield/helper-text";
-  import Card, { Content } from "@smui/card";
-  import Paper, { Title, Content } from '@smui/paper';
-
+  import Checkbox from "./Checkbox.svelte";
+  import TextArea from "./TextArea.svelte";
+  import TextAreaUrl from "./TextAreaUrl.svelte";
+  import Paper from "./Paper.svelte";
+  // import Switch from "./Switch.svelte";
+  import Button from "./Button.svelte";
+  let isManuallyInputToken = false;
+  let accountInfo = "";
   let config: PublishParameters = {
     article: {
       url: "default",
@@ -29,43 +29,45 @@
       use_desc: false,
     },
   };
+  function clickEventHandler(clickEvent: any) {}
 </script>
 
-<main>
-  <section>
-    <h1>简悦 Telegraph Webhook 配置生成器</h1>
-    <div class="margins">
-      <div>
-        <FormField>
-          <Checkbox bind:checked={config.telegram.bind} />
-          <span slot="label"> 在 Instant View 中显示加入频道按钮 </span>
-        </FormField>
-      </div>
-
-      <Paper color="secondary">
-        <Content>
-          <div>
-            <TextField bind:value={config.telegram.name} label="作者名称">
-              <HelperText slot="helper"
-                >显示在文章标题下方，留空则使用文章的网址</HelperText
-              >
-            </TextField>
-          </div>
-          <div>
-            <TextField bind:value={config.telegram.link} label="频道链接">
-              <HelperText slot="helper"
-                >频道的邀请链接，公开/私有皆可</HelperText
-              >
-            </TextField>
-          </div>
-        </Content>
-      </Paper>
-    </div>
-  </section>
-</main>
+<div class="mdui-container">
+  <h1>简悦 Telegraph Webhook 配置生成器</h1>
+  <Checkbox bind:checked={isManuallyInputToken}
+    >手动输入 Telegraph 账号凭证
+    <small>（即 <code>access_token</code>）</small></Checkbox
+  >
+  <Paper title="Telegraph 账号凭证">
+    {#if isManuallyInputToken}
+      <TextArea
+        label="Telegraph access_token"
+        bind:value={config.telegraph.access_token}
+      />
+    {:else}
+      <button
+        class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+        on:click={clickEventHandler}>创建 Telegraph 账户</button
+      >
+      <TextArea label="生成结果" bind:value={accountInfo} />
+      请点击上方按钮，在打开的页面中全选并复制，然后粘贴到此处，我们会自动处理。
+    {/if}
+  </Paper>
+  <div class="mdui-divider" />
+  <Checkbox bind:checked={config.telegram.bind}
+    >在文章中显示频道加入按钮</Checkbox
+  >
+  {#if config.telegram.bind}
+    <Paper title="频道信息设置">
+      <TextArea label="作者名称" bind:value={config.telegram.name} />
+      <TextAreaUrl label="频道链接" bind:value={config.telegram.link} />
+    </Paper>
+  {/if}
+  <TextArea value="{JSON.stringify(config, null, 2)}"/>
+</div>
 
 <style>
-  h1 {
-    font-weight: 400;
+  .mdui-divider {
+    margin: 1rem 0;
   }
 </style>

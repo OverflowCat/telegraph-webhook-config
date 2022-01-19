@@ -1,0 +1,15 @@
+<div class="mdui-textfield mdui-textfield-floating-label">
+  <label class="mdui-textfield-label">{@html label}</label>
+  <input class="mdui-textfield-input" type="text" bind:value={value}/>
+</div>
+
+<script lang="ts">
+  export let label = "";
+  export let value = "";
+</script>
+
+<style>
+  input {
+    font-family: monospace;
+  }
+</style>
