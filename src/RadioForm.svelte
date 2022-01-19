@@ -1,25 +1,32 @@
 <script lang="ts">
-  interface RadioOption {
-    label: string;
-    value: any;
-    // checked: boolean;
-  }
-  export let options: RadioOption[];
-  export let groupName: string;
-  export let value: any;
+  export let value;
+  export let groupName;
 </script>
 
-<form>
-  {#each options as option}
-    <label class="mdui-radio">
-      <input
-        type="radio"
-        name={groupName}
-        value={option.value}
-        checked={option.value}
-      />
-      <i class="mdui-radio-icon" />
-      {option.label}
-    </label>
-  {/each}
+<form class="mdui-container">
+  <label class="mdui-radio mdui-col">
+    <input type="radio" name={groupName} bind:group={value} value={1} />
+    <i class="mdui-radio-icon" />
+    使用简悦服务器端默认凭证
+  </label>
+  <label class="mdui-radio mdui-col">
+    <input type="radio" name={groupName} bind:group={value} value={2} />
+    <i class="mdui-radio-icon" />
+    创建新凭证
+  </label>
+  <label class="mdui-radio mdui-col">
+    <input type="radio" name={groupName} bind:group={value} value={3} />
+    <i class="mdui-radio-icon" />
+    输入已有凭证
+  </label>
 </form>
+
+<style>
+  form {
+    margin: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+
+</style>
