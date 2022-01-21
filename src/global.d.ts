@@ -11,6 +11,7 @@ interface Telegram {
   bind?: boolean;
   name?: string;
   link?: string;
+  chat?: string;
 }
 interface PublishParameters {
   version?: number;

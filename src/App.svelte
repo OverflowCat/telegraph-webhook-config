@@ -27,6 +27,7 @@
 
   let tokenMethod = 1;
   let accountInfo = "";
+  let isChannelPrivate = false;
   let config: PublishParameters = {
     article: {
       url: "{{url}}",
@@ -39,6 +40,7 @@
       bind: false,
       name: "",
       link: "",
+      chat: "-100…",
     },
     telegraph: {
       access_token: "",
@@ -96,7 +98,7 @@
         class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
         on:click={createAccount}>创建 Telegraph 账户</button
       >
-      <TextInput label="生成结果" bind:value={accountInfo} />
+      <TextInput label="生成结果" bind:value={accountInfo} icon="settings_input_component"/>
       请点击上方按钮，在打开的页面中全选并复制，然后粘贴到此处，我们会自动处理。
     </Paper>
   {:else if tokenMethod === 3}
@@ -104,6 +106,7 @@
       <TextInput
         float={false}
         label="Telegraph access_token"
+        icon="vpn_key"
         bind:value={config.telegraph.access_token}
       />
     </Paper>
@@ -116,20 +119,43 @@
   <div class="mdui-divider" />
 
   <h2 class="mdui-text-color-theme-600">Telegram 设置</h2>
-  <Checkbox bind:checked={config.telegram.bind}
-    >在文章中显示频道加入按钮</Checkbox
-  >
-  {#if config.telegram.bind}
-    <Paper title="频道信息设置">
-      <TextInput
-        label="作者名称"
-        bind:value={config.telegram.name}
-        maxlength="128"
-      />
+  <h3>频道推送设置</h3>
+  <Checkbox bind:checked={isChannelPrivate}>我的频道是一个私有频道</Checkbox>
+  {#if !isChannelPrivate}
+    <Paper title="公开频道设置">
       <TextInputUrl
         label="频道链接"
         bind:value={config.telegram.link}
         maxlength="512"
+      />
+    </Paper>
+  {:else}
+    <Paper title="私有频道设置">
+      <TextInput
+        label="私有频道 ID（<code>-100</code> 开头）"
+        bind:value={config.telegram.chat}
+        icon="settings_input_antenna"
+      />
+      {#if config.telegram.bind}
+        <TextInputUrl
+          label="私有频道加入链接"
+          bind:value={config.telegram.link}
+          maxlength="512"
+        />
+      {/if}
+    </Paper>
+  {/if}
+  <Checkbox bind:checked={config.telegram.bind}
+    >在即时预览中显示频道加入按钮</Checkbox
+  >
+  {#if config.telegram.bind}
+    <Paper title="作者信息设置">
+      <TextInput
+        label="作者名称"
+        bind:value={config.telegram.name}
+        maxlength="128"
+        icon="create"
+        required
       />
     </Paper>
   {/if}

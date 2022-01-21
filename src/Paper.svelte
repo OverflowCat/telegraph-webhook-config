@@ -11,6 +11,8 @@
     padding-bottom: 16px;
     padding-left: 16px;
     padding-right: 16px;    
+    margin-bottom: 16px;
+    margin-top: 16px;
   }
 </style>
 

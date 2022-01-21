@@ -16,6 +16,7 @@
     ? "mdui-textfield mdui-textfield-floating-label"
     : "mdui-textfield"}
 >
+<i class="mdui-icon material-icons">link</i>
   <label class="mdui-textfield-label">{@html label}</label>
   {#if maxlength != "0"}
     <input class="mdui-textfield-input" type="url" bind:value {maxlength} />
