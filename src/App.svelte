@@ -1,19 +1,29 @@
 <script lang="ts">
+  import mdui from "mdui";
   import Checkbox from "./Checkbox.svelte";
   import TextInput from "./TextInput.svelte";
   import TextInputUrl from "./TextInputUrl.svelte";
   import TextAreaShow from "./TextAreaShow.svelte";
   import Paper from "./Paper.svelte";
   import RadioForm from "./RadioForm.svelte";
-  // import { onMount } from "svelte";
+  import { onMount } from "svelte";
 
-  /*   function toast(message: any) {
+  function toast(message: any) {
     onMount(async () =>
-      eval(`window.mdui.snackbar({
-          message: "${message}",
-        })`)
+      mdui.snackbar({
+        message: "${message}",
+      })
     );
-  } */
+  }
+
+  let webhook = {
+    name: "Webhook2Telegraph",
+    url: "https://api-wrap-2.simpread.pro/api/service/telegraph",
+    type: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
   let tokenMethod = 1;
   let accountInfo = "";
@@ -66,7 +76,8 @@
     delete _config.style;
     if (_config.telegram.bind == false) _config.telegram = { bind: false };
     else _config.telegram.bind = true;
-    json = JSON.stringify(_config, null, 2);
+    webhook["body"] = _config;
+    json = JSON.stringify(webhook, null, 2);
   }
 </script>
 
@@ -90,7 +101,8 @@
     </Paper>
   {:else if tokenMethod === 3}
     <Paper title="手动输入">
-      <TextInput float={false}
+      <TextInput
+        float={false}
         label="Telegraph access_token"
         bind:value={config.telegraph.access_token}
       />
@@ -109,22 +121,41 @@
   >
   {#if config.telegram.bind}
     <Paper title="频道信息设置">
-      <TextInput label="作者名称" bind:value={config.telegram.name} maxlength="128"/>
-      <TextInputUrl label="频道链接" bind:value={config.telegram.link} maxlength="512"/>
+      <TextInput
+        label="作者名称"
+        bind:value={config.telegram.name}
+        maxlength="128"
+      />
+      <TextInputUrl
+        label="频道链接"
+        bind:value={config.telegram.link}
+        maxlength="512"
+      />
     </Paper>
   {/if}
   <div class="mdui-divider" />
 
   <h2 class="mdui-text-color-theme-600">生成结果</h2>
   <TextAreaShow label="生成的 Webhook 配置" value={json} />
-  <button id="generated" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
-    on:click={()=>{
-      navigator.clipboard.writeText(json).then(function() {
-      console.log('Copying to clipboard succeeded!');
-    }, function(err) {
-      console.error('Could not copy text: ', err);
-    });
-    }}>复制</button>
+  <button
+    id="generated"
+    class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+    on:click={() => {
+      navigator.clipboard.writeText(json).then(
+        function () {
+          mdui.snackbar({
+            message: "已复制到剪贴板",
+          });
+        },
+        function (err) {
+          mdui.snackbar({
+            message: "复制到剪贴板失败",
+          });
+          console.error("Could not copy text: ", err);
+        }
+      );
+    }}>复制</button
+  >
 </div>
 
 <style>

@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   export let label = "";
   export let value = "";
   export let maxlength = "0";
   export let float = true;
+  import mdui from "mdui";
+  import { onMount } from "svelte";
+  onMount(async () => mdui.mutation());
 </script>
 
 <!-- 禁用状态 -->

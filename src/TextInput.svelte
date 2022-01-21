@@ -3,7 +3,9 @@
   export let value = "";
   export let maxlength = '0';
   export let float = true;
-
+  import mdui from "mdui";
+  import {onMount} from "svelte";
+  onMount(async() => mdui.mutation());
 </script>
 
 <div
